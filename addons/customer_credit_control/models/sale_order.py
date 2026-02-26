@@ -21,19 +21,19 @@ class SaleOrder(models.Model):
         currency_field="currency_id",
     )
 
+    def _get_active_credit_limit(self):
+        self.ensure_one()
+        if not self.partner_id:
+            return self.env["customer.credit.limit"]
+        return self.env["customer.credit.limit"].sudo().search([
+            ("active", "=", True),
+            ("partner_id", "child_of", self.partner_id.commercial_partner_id.id),
+        ], limit=1, order="id desc")
+
     @api.depends("partner_id")
     def _compute_credit_limit_id(self):
-        Limit = self.env["customer.credit.limit"].sudo()
         for order in self:
-            order.credit_limit_id = False
-            if not order.partner_id:
-                continue
-            commercial = order.partner_id.commercial_partner_id
-            limit = Limit.search([
-                ("active", "=", True),
-                ("partner_id", "child_of", commercial.id),
-            ], limit=1)
-            order.credit_limit_id = limit
+            order.credit_limit_id = order._get_active_credit_limit()
 
     @api.depends("credit_limit_id", "amount_total", "partner_id")
     def _compute_credit_info(self):
@@ -48,7 +48,8 @@ class SaleOrder(models.Model):
 
     def action_confirm(self):
         for order in self:
-            limit = order.credit_limit_id
+            # Re-fetch at confirm-time to avoid relying on a computed cache value.
+            limit = order._get_active_credit_limit()
             if limit:
                 # IMPORTANT: Ensure currencies match (simple version assumes same currency)
                 if limit.currency_id != order.currency_id:

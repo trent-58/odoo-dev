@@ -46,8 +46,13 @@
     </record>
 
     <menuitem id="menu_customer_credit_root" name="Credit Control" parent="account.menu_finance" sequence="90"
-              groups="customer_credit_control.group_credit_limit_manager"/>
+              groups="customer_credit_control.group_credit_limit_manager,sales_team.group_sale_manager,sales_team.group_sale_salesman"/>
     <menuitem id="menu_customer_credit_limits" name="Customer Credit Limits"
               parent="menu_customer_credit_root" action="action_customer_credit_limit" sequence="10"
-              groups="customer_credit_control.group_credit_limit_manager"/>
+              groups="customer_credit_control.group_credit_limit_manager,sales_team.group_sale_manager,sales_team.group_sale_salesman"/>
+
+    <!-- Also expose credit limits from Sales for users who work primarily there -->
+    <menuitem id="menu_customer_credit_limits_sales" name="Customer Credit Limits"
+              parent="sale.sale_menu_root" action="action_customer_credit_limit" sequence="95"
+              groups="customer_credit_control.group_credit_limit_manager,sales_team.group_sale_manager,sales_team.group_sale_salesman"/>
 </odoo>

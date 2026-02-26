@@ -4,6 +4,11 @@
         <field name="name">Credit Limit Manager</field>
     </record>
 
+    <!-- Settings admins should always be able to access this module -->
+    <record id="base.group_system" model="res.groups">
+        <field name="implied_ids" eval="[(4, ref('customer_credit_control.group_credit_limit_manager'))]"/>
+    </record>
+
     <!-- Accounting managers should automatically have credit-limit manager rights -->
     <record id="account.group_account_manager" model="res.groups">
         <field name="implied_ids" eval="[(4, ref('customer_credit_control.group_credit_limit_manager'))]"/>
