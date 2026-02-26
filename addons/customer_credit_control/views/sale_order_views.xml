@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- Inject credit info into Sale Order -->
+    <record id="view_sale_order_form_credit_info" model="ir.ui.view">
+        <field name="name">sale.order.form.credit.info</field>
+        <field name="model">sale.order</field>
+        <field name="inherit_id" ref="sale.view_order_form"/>
+        <field name="arch" type="xml">
+            <!-- Make sure these fields exist in the view (Odoo requires that) -->
+            <xpath expr="//sheet" position="inside">
+                <field name="credit_limit_id" invisible="1"/>
+                <field name="credit_total_due" invisible="1"/>
+                <field name="credit_remaining" invisible="1"/>
+            </xpath>
+
+            <!-- Show info near the top -->
+            <xpath expr="//sheet//group" position="before">
+                <group string="Credit Control" invisible="credit_limit_id == False">
+                    <field name="credit_total_due" readonly="1"/>
+                    <field name="credit_remaining" readonly="1"/>
+                    <div class="alert alert-warning" role="alert" invisible="credit_remaining &gt;= 0">
+                        Remaining credit is negative. This customer is over the limit.
+                    </div>
+                </group>
+            </xpath>
+        </field>
+    </record>
+</odoo>

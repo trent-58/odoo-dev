@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="view_sale_approval_request_tree" model="ir.ui.view">
+        <field name="name">sale.approval.request.tree</field>
+        <field name="model">sale.approval.request</field>
+        <field name="arch" type="xml">
+            <tree>
+                <field name="name"/>
+                <field name="sale_order_id"/>
+                <field name="requested_by"/>
+                <field name="approved_by"/>
+                <field name="state"/>
+                <field name="total_amount"/>
+            </tree>
+        </field>
+    </record>
+
+    <record id="view_sale_approval_request_form" model="ir.ui.view">
+        <field name="name">sale.approval.request.form</field>
+        <field name="model">sale.approval.request</field>
+        <field name="arch" type="xml">
+            <form>
+                <header>
+                    <!-- IMPORTANT: quote selection values -->
+                    <button name="action_submit" type="object" string="Submit" class="btn-primary"
+                            invisible="state != 'draft'"/>
+                    <button name="action_approve" type="object" string="Approve" class="btn-primary"
+                            groups="mini_sales_approval.group_sale_approval_manager"
+                            invisible="state != 'submitted'"/>
+                    <button name="action_reject" type="object" string="Reject" class="btn-secondary"
+                            groups="mini_sales_approval.group_sale_approval_manager"
+                            invisible="state != 'submitted'"/>
+                    <field name="state" widget="statusbar" statusbar_visible="draft,submitted,approved,rejected"/>
+                </header>
+
+                <sheet>
+                    <group>
+                        <field name="name" readonly="1"/>
+                        <field name="sale_order_id"/>
+                        <field name="requested_by" readonly="1"/>
+                        <field name="approved_by" readonly="1"/>
+                        <field name="total_amount" readonly="1"/>
+                    </group>
+
+                    <group string="Reject Reason" invisible="state != 'rejected'">
+                        <field name="reject_reason"/>
+                    </group>
+
+                    <group string="Reason (required before rejecting)" invisible="state != 'submitted'">
+                        <field name="reject_reason"/>
+                    </group>
+                </sheet>
+            </form>
+        </field>
+    </record>
+</odoo>

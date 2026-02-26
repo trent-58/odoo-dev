@@ -1,0 +1,14 @@
+# Python cache
+__pycache__/
+*.py[cod]
+
+# Odoo/Postgres runtime data (docker volumes)
+db-data/
+odoo-data/
+odoo-data-addons/
+odoo-local-addons/
+
+# Odoo session/cache artifacts
+*.log
+*.pid
+*.sess

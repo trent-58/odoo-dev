@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="group_sale_approval_user" model="res.groups">
+        <field name="name">Sales Approval User</field>
+    </record>
+
+    <record id="group_sale_approval_manager" model="res.groups">
+        <field name="name">Sales Approval Manager</field>
+        <field name="implied_ids" eval="[(4, ref('mini_sales_approval.group_sale_approval_user'))]"/>
+    </record>
+
+    <record id="sales_team.group_sale_manager" model="res.groups">
+        <field name="implied_ids" eval="[(4, ref('mini_sales_approval.group_sale_approval_manager'))]"/>
+    </record>
+</odoo>

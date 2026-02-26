@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="group_credit_limit_manager" model="res.groups">
+        <field name="name">Credit Limit Manager</field>
+    </record>
+
+    <!-- Accounting managers should automatically have credit-limit manager rights -->
+    <record id="account.group_account_manager" model="res.groups">
+        <field name="implied_ids" eval="[(4, ref('customer_credit_control.group_credit_limit_manager'))]"/>
+    </record>
+</odoo>
